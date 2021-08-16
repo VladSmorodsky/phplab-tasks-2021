@@ -14,13 +14,8 @@ class BasicsValidator implements BasicsValidatorInterface
      */
     public function isMinutesException(int $minute): void
     {
-        if (
-            $minute < 0 
-            || $minute > 60
-        ) {
-            throw new \InvalidArgumentException(
-                'Minutes should be between 0 to 60'
-            );
+        if ($minute < 0 || $minute > 60) {
+            throw new \InvalidArgumentException('Minutes should be between 0 to 60');
         }
     }
 
@@ -31,9 +26,7 @@ class BasicsValidator implements BasicsValidatorInterface
     public function isYearException(int $year): void
     {
         if ($year < 1900) {
-            throw new \InvalidArgumentException(
-                'Year should be greater than 1900'
-            );
+            throw new \InvalidArgumentException('Year should be greater than 1900');
         }
     }
 
@@ -44,9 +37,7 @@ class BasicsValidator implements BasicsValidatorInterface
     public function isValidStringException(string $input): void
     {
         if (strlen($input) < 6) {
-            throw new \InvalidArgumentException(
-                'Input cannot exists less than 6 digits'
-            );
+            throw new \InvalidArgumentException('Input cannot exists less than 6 digits');
         }
     }
 }
