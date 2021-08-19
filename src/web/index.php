@@ -9,7 +9,12 @@ $airports = require './airports.php';
  * and apply filtering by First Airport Name Letter and/or Airport State
  * (see Filtering tasks 1 and 2 below)
  */
-
+if (!empty($_GET['filter_by_first_letter'])) {
+    $airports = web\filterByUniqueLetter($airports, $_GET['filter_by_first_letter']);
+}
+if (!empty($_GET['filter_by_state'])) {
+    $airports = web\filterByUniqueLetter($airports, $_GET['filter_by_first_letter']);
+}
 // Sorting
 /**
  * Here you need to check $_GET request if it has sorting key
@@ -52,8 +57,8 @@ $airports = require './airports.php';
     <div class="alert alert-dark">
         Filter by first letter:
 
-        <?php foreach (getUniqueFirstLetters(require './airports.php') as $letter): ?>
-            <a href="#"><?= $letter ?></a>
+        <?php foreach (web\getUniqueFirstLetters(require './airports.php') as $letter): ?>
+            <a href="/?filter_by_first_letter=<?= $letter ?>"><?= $letter ?></a>
         <?php endforeach; ?>
 
         <a href="/" class="float-right">Reset all filters</a>
@@ -95,7 +100,7 @@ $airports = require './airports.php';
         <tr>
             <td><?= $airport['name'] ?></td>
             <td><?= $airport['code'] ?></td>
-            <td><a href="#"><?= $airport['state'] ?></a></td>
+            <td><a href="/?filter_by_state=<?= $airport['state'] ?>"><?= $airport['state'] ?></a></td>
             <td><?= $airport['city'] ?></td>
             <td><?= $airport['address'] ?></td>
             <td><?= $airport['timezone'] ?></td>
