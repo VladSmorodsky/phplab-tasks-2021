@@ -14,9 +14,7 @@ class Arrays implements ArraysInterface
     {
         $repetitivedArray = [];
         for ($i = 0; $i < count($input); $i++) {
-            for ($j = 0; $j < $input[$i]; $j++) {
-                $repetitivedArray[] = $input[$i];
-            }
+            $repetitivedArray = array_merge($repetitivedArray, array_fill(count($repetitivedArray), $input[$i], $input[$i]));
         }
 
         return $repetitivedArray;
@@ -28,19 +26,11 @@ class Arrays implements ArraysInterface
      */
     public function getUniqueValue(array $input): int
     {
-        $countElementsArray = array_count_values($input);
-        $lowestUniqueValue = 0;
-
-        foreach ($countElementsArray as $key => $value) {
-            if ($value !== 1 ) {
-                continue;
-            }
-            if ($lowestUniqueValue === 0 || $key < $lowestUniqueValue) {
-                $lowestUniqueValue = $key;
-            }
-        }
+        $countElementsArray = array_filter(array_count_values($input), function($item) {
+            return $item === 1;
+        });
         
-        return $lowestUniqueValue;
+        return count($countElementsArray) > 0 ? min(array_keys($countElementsArray)) : 0;
     }
 
     /**
@@ -51,15 +41,15 @@ class Arrays implements ArraysInterface
     {
         $transformedArray = [];
         for ($i = 0; $i < count($input); $i++) {
-           foreach ($input[$i]['tags'] as $key => $value) {
-               $transformedArray[$value][] = $input[$i]['name'];
-               usort($transformedArray[$value], function($nameFirst, $nameSecond) {
-                   return strcmp($nameFirst, $nameSecond);
-               });
-           } 
+            foreach ($input[$i]['tags'] as $key => $value) {
+                $transformedArray[$value][] = $input[$i]['name'];
+                usort($transformedArray[$value], function($nameFirst, $nameSecond) {
+                    return strcmp($nameFirst, $nameSecond);
+                });
+            } 
         }
         ksort($transformedArray);
-
+ 
         return $transformedArray;
     }
 }
