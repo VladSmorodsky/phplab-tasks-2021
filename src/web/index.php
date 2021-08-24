@@ -10,10 +10,10 @@ $airports = require './airports.php';
  * (see Filtering tasks 1 and 2 below)
  */
 if (!empty($_GET['filter_by_first_letter'])) {
-    $airports = web\filterByUniqueLetter($airports, $_GET['filter_by_first_letter']);
+    $airports = filterByUniqueLetter($airports, $_GET['filter_by_first_letter']);
 }
 if (!empty($_GET['filter_by_state'])) {
-    $airports = web\filterByUniqueLetter($airports, $_GET['filter_by_first_letter']);
+    $airports = filterByState($airports, $_GET['filter_by_state']);
 }
 // Sorting
 /**
@@ -21,13 +21,22 @@ if (!empty($_GET['filter_by_state'])) {
  * and apply sorting
  * (see Sorting task below)
  */
-
+if (!empty($_GET['sort'])) {
+    $airports = sortAirportsBy($airports, $_GET['sort']);
+}
 // Pagination
 /**
  * Here you need to check $_GET request if it has pagination key
  * and apply pagination logic
  * (see Pagination task below)
  */
+
+if (!empty($_GET['page'])) {
+    $airportsPerPage = getAirports($airports, $_GET['page']);
+} else {
+    $airportsPerPage = getAirports($airports);
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -38,6 +47,7 @@ if (!empty($_GET['filter_by_state'])) {
     <title>Airports</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main role="main" class="container">
@@ -57,8 +67,8 @@ if (!empty($_GET['filter_by_state'])) {
     <div class="alert alert-dark">
         Filter by first letter:
 
-        <?php foreach (web\getUniqueFirstLetters(require './airports.php') as $letter): ?>
-            <a href="/?filter_by_first_letter=<?= $letter ?>"><?= $letter ?></a>
+        <?php foreach (getUniqueFirstLetters(require './airports.php') as $letter): ?>
+            <a href="<?= buildUrl('filter_by_first_letter', $letter )?>"><?= $letter ?></a>
         <?php endforeach; ?>
 
         <a href="/" class="float-right">Reset all filters</a>
@@ -77,10 +87,10 @@ if (!empty($_GET['filter_by_state'])) {
     <table class="table">
         <thead>
         <tr>
-            <th scope="col"><a href="#">Name</a></th>
-            <th scope="col"><a href="#">Code</a></th>
-            <th scope="col"><a href="#">State</a></th>
-            <th scope="col"><a href="#">City</a></th>
+            <th scope="col"><a href="<?= buildUrl('sort', 'name')?>">Name</a></th>
+            <th scope="col"><a href="<?= buildUrl('sort', 'code')?>">Code</a></th>
+            <th scope="col"><a href="<?= buildUrl('sort', 'state')?>">State</a></th>
+            <th scope="col"><a href="<?= buildUrl('sort', 'city')?>">City</a></th>
             <th scope="col">Address</th>
             <th scope="col">Timezone</th>
         </tr>
@@ -96,11 +106,13 @@ if (!empty($_GET['filter_by_state'])) {
              - when you apply filter_by_state, than filter_by_first_letter (see Filtering task #1) is not reset
                i.e. if you have filter_by_first_letter set you can additionally use filter_by_state
         -->
-        <?php foreach ($airports as $airport): ?>
+        <?php foreach ($airportsPerPage as $airport): ?>
         <tr>
             <td><?= $airport['name'] ?></td>
             <td><?= $airport['code'] ?></td>
-            <td><a href="/?filter_by_state=<?= $airport['state'] ?>"><?= $airport['state'] ?></a></td>
+            <td>
+                <a href="<?= buildUrl('filter_by_state', $airport['state']) ?>"><?= $airport['state'] ?></a>
+            </td>
             <td><?= $airport['city'] ?></td>
             <td><?= $airport['address'] ?></td>
             <td><?= $airport['timezone'] ?></td>
@@ -119,12 +131,18 @@ if (!empty($_GET['filter_by_state'])) {
          - when you apply pagination - all filters and sorting are not reset
     -->
     <nav aria-label="Navigation">
-        <ul class="pagination justify-content-center">
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <ul class="pagination justify-content-center wrap">
+            <?php for ($pageNumber = 1; $pageNumber <= countPage($airports); $pageNumber++ ) : ?>
+                <li class="page-item
+                    <?php if ((isset($_GET['page']) && (int) $_GET['page'] === (int) $pageNumber)
+                        || (countPage($airports) <= 1)
+                        || (!isset($_GET['page']) && $pageNumber === 1)) echo 'active' ?>">
+                    <a class="page-link" href="<?= buildUrl('page', $pageNumber) ?>"><?= $pageNumber?></a>
+                </li>
+            <?php endfor; ?>
         </ul>
     </nav>
 
 </main>
+</body>
 </html>
