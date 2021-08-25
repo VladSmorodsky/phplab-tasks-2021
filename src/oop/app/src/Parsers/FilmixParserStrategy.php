@@ -10,6 +10,13 @@ class FilmixParserStrategy implements ParserInterface
     private const TITLE_TEMPLATE = '#<h1.*class="name".*?>(.*)<\/h1>#';
     private const DESCRIPTION_TEMPLATE = '#<div.*class="about".*?><div.*?>(.*?)<\/div>#';
 
+    private Movie $movie;
+
+    public function __construct(Movie $movie)
+    {
+        $this->movie = $movie;
+    }
+
     /**
      * @param string $siteContent
      * @return mixed
@@ -27,6 +34,8 @@ class FilmixParserStrategy implements ParserInterface
         preg_match(self::DESCRIPTION_TEMPLATE, $siteContent, $matches);
         $description = preg_replace('/\<br \/\>/', '', $matches[1]);
 
-        return new Movie($title, $imgUrl, $description);
+        return $this->movie->setTitle($title)
+            ->setPoster($imgUrl)
+            ->setDescription($description);
     }
 }

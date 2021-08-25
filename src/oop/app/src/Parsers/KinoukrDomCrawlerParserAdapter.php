@@ -7,6 +7,13 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class KinoukrDomCrawlerParserAdapter implements ParserInterface
 {
+    private Movie $movie;
+
+    public function __construct(Movie $movie)
+    {
+        $this->movie = $movie;
+    }
+
     /**
      * @param string $siteContent
      * @return mixed
@@ -19,6 +26,8 @@ class KinoukrDomCrawlerParserAdapter implements ParserInterface
         $imgUrl = $domCrawler->filter('div.fposter a')->attr('href');
         $description = $domCrawler->filter('div.fdesc')->text();
 
-        return new Movie($title, $imgUrl, $description);
+        return $this->movie->setTitle($title)
+            ->setPoster($imgUrl)
+            ->setDescription($description);
     }
 }

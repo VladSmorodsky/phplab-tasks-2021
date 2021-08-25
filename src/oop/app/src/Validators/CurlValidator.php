@@ -19,7 +19,7 @@ class CurlValidator implements ValidatorInterface
      */
     private function isTooManyRequests($curlConnection): void
     {
-        if (curl_getinfo($curlConnection,CURLINFO_HTTP_CODE) === 429) {
+        if (curl_getinfo($curlConnection, CURLINFO_HTTP_CODE) === 429) {
             throw new \Exception('Too many requests. Please try to parse later');
         }
     }
