@@ -8,12 +8,12 @@ class Movie implements MovieInterface
     private string $poster;
     private string $description;
 
-    public function __construct(string $title, string $poster, string $description)
-    {
-        $this->title = $title;
-        $this->poster = $poster;
-        $this->description = $description;
-    }
+//    public function __construct(string $title, string $poster, string $description)
+//    {
+//        $this->title = $title;
+//        $this->poster = $poster;
+//        $this->description = $description;
+//    }
 
     /**
      * @return string
@@ -26,9 +26,10 @@ class Movie implements MovieInterface
     /**
      * @param string $title
      */
-    public function setTitle(string $title): void
+    public function setTitle(string $title): Movie
     {
         $this->title = $title;
+        return $this;
     }
 
     /**
@@ -42,9 +43,10 @@ class Movie implements MovieInterface
     /**
      * @param string $poster
      */
-    public function setPoster(string $poster): void
+    public function setPoster(string $poster): Movie
     {
         $this->poster = $poster;
+        return $this;
     }
 
     /**
@@ -58,9 +60,9 @@ class Movie implements MovieInterface
     /**
      * @param string $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(string $description): Movie
     {
         $this->description = $description;
+        return $this;
     }
-
 }

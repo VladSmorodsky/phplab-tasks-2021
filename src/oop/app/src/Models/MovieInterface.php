@@ -24,7 +24,7 @@ interface MovieInterface
     /**
      * @param string $title
      */
-    public function setTitle(string $title): void;
+    public function setTitle(string $title): Movie;
 
     /**
      * @return string
@@ -34,7 +34,7 @@ interface MovieInterface
     /**
      * @param string $poster
      */
-    public function setPoster(string $poster): void;
+    public function setPoster(string $poster): Movie;
 
     /**
      * @return string
@@ -44,5 +44,5 @@ interface MovieInterface
     /**
      * @param string $description
      */
-    public function setDescription(string $description): void;
+    public function setDescription(string $description): Movie;
 }
