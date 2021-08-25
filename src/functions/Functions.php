@@ -57,9 +57,7 @@ class Functions
      */
     public function sayHelloArgumentWrapper($arg): string
     {
-        if (!is_numeric($arg) || !is_string($arg) || !is_bool($arg)) {
-            throw new \InvalidArgumentException('Not valid argument. Try use arg. type: number, string or bool');
-        }
+        // put your code here
 
         return $this->sayHelloArgument($arg);
     }
