@@ -14,7 +14,6 @@ define('ITEMS_PER_PAGE', 5);
 
 function getUniqueFirstLetters(array $airports): array
 {
-    // put your logic here
     $firstLetters = [];
     foreach ( $airports as $airport) {
         if (! in_array($airport['name'][0], $firstLetters)) {
@@ -39,12 +38,12 @@ function filterByUniqueLetter(array $airports, string $uniqueLetter): array
 
 function filterByState(array $airports, string $state): array
 {
-    return array_filter($airports, function($airport) use ($state) {
+    return array_values(array_filter($airports, function($airport) use ($state) {
         return $airport['state'] === $state;
-    });
+    }));
 }
 
-function sortAirportsBy($airports, $columnName)
+function sortAirportsBy(array $airports, string $columnName): array
 {
     $column = array_column($airports, $columnName);
     array_multisort($column, SORT_ASC, $airports);
@@ -52,9 +51,9 @@ function sortAirportsBy($airports, $columnName)
     return $airports;
 }
 
-function buildUrl($paramKey, $value)
+function buildUrl(string $paramKey, string $value, string $customParams = null): string
 {
-    $urlParams = $_SERVER['QUERY_STRING'];
+    $urlParams = $customParams ?? $_SERVER['QUERY_STRING'];
     $fullParameter = $paramKey . '=' . $value;
 
     if (empty($urlParams)) {
@@ -70,37 +69,32 @@ function buildUrl($paramKey, $value)
     } else {
         $urlParams .= "&$fullParameter";
     }
-
-    if (($paramKey === 'filter_by_state' || $paramKey === 'filter_by_first_letter')
-        && isset($_GET['page'])) {
-        $urlParams = preg_replace('/page=(.*?)(&|$)/', '', $urlParams);
-    }
     $urlParams = resetPageFilter($paramKey, $urlParams);
 
-    return '/?' . rtrim($urlParams, '&');
+    return '/?' . trim($urlParams, '&');
 }
 
-function resetPageFilter($paramKey, $urlParams)
+function resetPageFilter(string $paramKey, string $urlParams): string
 {
     if (($paramKey === 'filter_by_state' || $paramKey === 'filter_by_first_letter')
         && isset($_GET['page'])) {
-        return preg_replace('/page=(.*?)(&|$)/', '', $urlParams);
+        return preg_replace('/(&|^)page=\d+/', '', $urlParams);
     }
 
     return $urlParams;
 }
 
-function countPage($airports)
+function countPage(array $airports): int
 {
     return ceil(count($airports) / ITEMS_PER_PAGE);
 }
 
-function getAirports($airports, $page = 0)
+function getAirports(array $airports, int $page = 0): array
 {
     return array_slice($airports, getOffsetCount($page), ITEMS_PER_PAGE);
 }
 
-function getOffsetCount($page)
+function getOffsetCount(int $page): int
 {
     return $page > 1 ? ITEMS_PER_PAGE * ($page - 1) : 0;
 }

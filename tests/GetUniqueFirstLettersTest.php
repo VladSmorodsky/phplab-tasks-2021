@@ -2,21 +2,18 @@
 
 use PHPUnit\Framework\TestCase;
 
-class CountArgumentsWrapperTest extends TestCase
+class GetUniqueFirstLettersTest extends TestCase
 {
-    protected $web;
-
-    protected function setUp(): void
-    {
-        
-    }
+    protected function setUp(): void {}
 
     /**
      * @dataProvider airportsDataProvider
+     * @param array $airports
+     * @param string $expectedLetters
      */
-    public function testFirstAirportsLetter($airports, $expectedLetters): void
+    public function testFirstAirportsLetter(array $airports, string $expectedLetters): void
     {
-        $this->assertEquals($expectedLetters, web\getUniqueFirstLetters($airports));
+        $this->assertEquals($expectedLetters, getUniqueFirstLetters($airports));
     }
 
     public function airportsDataProvider(): array
