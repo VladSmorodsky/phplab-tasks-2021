@@ -91,6 +91,13 @@ class Functions
      */
     public function countArgumentsWrapper(): array
     {
-        // put your code here
+        $arg = func_get_args();
+        foreach ($arg as $value) {
+            if (!is_string($value)) {
+                throw new \InvalidArgumentException('String are allowed only, bro!');
+            }
+        }
+
+        return $this->countArguments($arg);
     }
 }
