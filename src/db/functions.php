@@ -7,7 +7,7 @@
  * @param string|null $customParams
  * @return string
  */
-function buildUrl(string $paramKey, string $value, string $customParams = null): string
+function buildUrl(string $paramKey, string $value, ?string $customParams = null): string
 {
     $urlParams = $customParams ?? $_SERVER['QUERY_STRING'];
     $fullParameter = $paramKey . '=' . $value;
@@ -38,8 +38,7 @@ function buildUrl(string $paramKey, string $value, string $customParams = null):
  */
 function resetPageFilter(string $paramKey, string $urlParams): string
 {
-    if (($paramKey === 'filter_by_state' || $paramKey === 'filter_by_first_letter')
-        && isset($_GET['page'])) {
+    if (($paramKey === 'filter_by_state' || $paramKey === 'filter_by_first_letter') && isset($_GET['page'])) {
         return preg_replace('/(&|^)page=\d+/', '', $urlParams);
     }
 
