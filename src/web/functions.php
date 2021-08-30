@@ -51,7 +51,7 @@ function sortAirportsBy(array $airports, string $columnName): array
     return $airports;
 }
 
-function buildUrl(string $paramKey, string $value, string $customParams = null): string
+function buildUrl(string $paramKey, string $value, ?string $customParams = null): string
 {
     $urlParams = $customParams ?? $_SERVER['QUERY_STRING'];
     $fullParameter = $paramKey . '=' . $value;

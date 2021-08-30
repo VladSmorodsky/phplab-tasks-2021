@@ -14,8 +14,11 @@ class BuildUrlTest extends TestCase
      * @param string $expectedResult
      * @param int|null $pageNumberParamTest
      */
-    public function testBuildUrl(string $paramKey, string $value, string $existedQueryString,
-                                 string $expectedResult, int $pageNumberParamTest = null): void
+    public function testBuildUrl(string $paramKey,
+                                 string $value,
+                                 string $existedQueryString,
+                                 string $expectedResult,
+                                 int $pageNumberParamTest = null): void
     {
         if (!empty($pageNumberParamTest)) {
             $_GET['page'] = $pageNumberParamTest;
